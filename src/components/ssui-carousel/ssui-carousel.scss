@@ -50,7 +50,7 @@
   width: 100%;
   backface-visibility: hidden;
   perspective: 1000px;
-  transition: transform 1s ease;
+  transition: transform 1s linear;
 }
 
 ::slotted(.visible),
@@ -67,14 +67,22 @@
 }
 
 // Set initial position to the right of active
-::slotted(.visible-next) {
-  transform: translate3d(100%, 0, 0);
+::slotted(.visible-next),
+::slotted(.visible-prev) {
   position: absolute;
   top: 0;
   display: block;
 }
 
-::slotted(.slide-prev:not(.active)),
+::slotted(.visible-next) {
+  transform: translate3d(100%, 0, 0);
+}
+
+::slotted(.visible-prev) {
+  transform: translate3d(-100%, 0, 0);
+}
+
+::slotted(.visible-prev.slide-prev),
 ::slotted(.visible-next.slide-next) {
   transform: translate3d(0, 0, 0);
 }

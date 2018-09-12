@@ -31,38 +31,54 @@ export class SSUICarousel {
   @State()
   transitioning: boolean
 
-  showNext = () => {
-    console.log("slide next")
+  transition = (
+    newActiveElement: Element,
+    visibleDirection: string,
+    slideDirection: string
+  ) => {
     // Don't allow multiple transitions
     if (this.transitioning) {
       return
     }
     this.transitioning = true
 
-    let eventListener = e => {
+    // On animation completion, update classnames
+    let onComplete = e => {
       console.log("transition over", e)
-      this.activeSlide.removeEventListener("transitionend", eventListener)
-      this.setActive(this.getNextElement(this.activeSlide))
+      this.activeSlide.removeEventListener("transitionend", onComplete)
+      this.setActive(newActiveElement)
       this.transitioning = false
     }
-    this.activeSlide.addEventListener("transitionend", eventListener)
+    this.activeSlide.addEventListener("transitionend", onComplete)
     // Set next to visible
-    Array.from(
-      this.element.querySelectorAll(`.${cssDefinitions.visibleNext}`)
-    ).forEach(el => {
-      console.log("next found", el)
-      el.classList.add(cssDefinitions.visible)
-      // Add animation
-      el.classList.add(cssDefinitions.slideNext)
-    })
+    Array.from(this.element.querySelectorAll(`.${visibleDirection}`)).forEach(
+      el => {
+        console.log("next found", el)
+        el.classList.add(cssDefinitions.visible)
+        // Add animation
+        el.classList.add(slideDirection)
+      }
+    )
     // add active animation classes
-    this.activeSlide.classList.add(cssDefinitions.slideNext)
-    // On animation completion, update classnames
+    this.activeSlide.classList.add(slideDirection)
+  }
+
+  showNext = () => {
+    console.log("slide next")
+    this.transition(
+      this.getNextElement(this.activeSlide),
+      cssDefinitions.visibleNext,
+      cssDefinitions.slideNext
+    )
   }
 
   showPrev = () => {
     console.log("slide prev")
-    this.setActive(this.getPrevElement(this.activeSlide))
+    this.transition(
+      this.getPrevElement(this.activeSlide),
+      cssDefinitions.visiblePrev,
+      cssDefinitions.slidePrev
+    )
   }
 
   getNextElement = (element: Element) => {
@@ -75,29 +91,37 @@ export class SSUICarousel {
     )
   }
 
-  removeActive = () => {
-    if (this.activeSlide) {
-      this.activeSlide.classList.remove(cssDefinitions.active)
-      this.activeSlide.classList.remove(cssDefinitions.visible)
-      this.activeSlide.classList.remove(cssDefinitions.slideNext)
-      Array.from(
-        this.element.querySelectorAll(`.${cssDefinitions.visibleNext}`)
-      ).forEach(el => {
-        el.classList.remove(cssDefinitions.visibleNext)
-        el.classList.remove(cssDefinitions.slideNext)
-      })
-    }
+  removeStateClasses = () => {
+    Array.from(this.element.children).forEach(el => {
+      el.classList.remove(
+        cssDefinitions.visibleNext,
+        cssDefinitions.active,
+        cssDefinitions.visible,
+        cssDefinitions.slideNext,
+        cssDefinitions.slidePrev,
+        cssDefinitions.visiblePrev
+      )
+    })
   }
 
   setActive = (element: Element) => {
     if (element) {
-      this.removeActive()
+      this.removeStateClasses()
+      // Support multiple active slides
       this.activeSlide = element
-      this.activeSlide.classList.add(cssDefinitions.active)
-      this.activeSlide.classList.add(cssDefinitions.visible)
+      this.activeSlide.classList.add(
+        cssDefinitions.active,
+        cssDefinitions.visible
+      )
       // Set next slides to next visible
+      // TODO: Support multiple
       this.getNextElement(this.activeSlide).classList.add(
         cssDefinitions.visibleNext
+      )
+      // Set prev slides to prev visible
+      // TODO: support multiple
+      this.getPrevElement(this.activeSlide).classList.add(
+        cssDefinitions.visiblePrev
       )
     }
   }
