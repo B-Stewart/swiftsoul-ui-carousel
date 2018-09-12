@@ -29,30 +29,30 @@ declare global {
 declare global {
 
   namespace StencilComponents {
-    interface SwiftyCarousel {
+    interface SsuiCarousel {
 
     }
   }
 
-  interface HTMLSwiftyCarouselElement extends StencilComponents.SwiftyCarousel, HTMLStencilElement {}
+  interface HTMLSsuiCarouselElement extends StencilComponents.SsuiCarousel, HTMLStencilElement {}
 
-  var HTMLSwiftyCarouselElement: {
-    prototype: HTMLSwiftyCarouselElement;
-    new (): HTMLSwiftyCarouselElement;
+  var HTMLSsuiCarouselElement: {
+    prototype: HTMLSsuiCarouselElement;
+    new (): HTMLSsuiCarouselElement;
   };
   interface HTMLElementTagNameMap {
-    'swifty-carousel': HTMLSwiftyCarouselElement;
+    'ssui-carousel': HTMLSsuiCarouselElement;
   }
   interface ElementTagNameMap {
-    'swifty-carousel': HTMLSwiftyCarouselElement;
+    'ssui-carousel': HTMLSsuiCarouselElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      'swifty-carousel': JSXElements.SwiftyCarouselAttributes;
+      'ssui-carousel': JSXElements.SsuiCarouselAttributes;
     }
   }
   namespace JSXElements {
-    export interface SwiftyCarouselAttributes extends HTMLAttributes {
+    export interface SsuiCarouselAttributes extends HTMLAttributes {
 
     }
   }

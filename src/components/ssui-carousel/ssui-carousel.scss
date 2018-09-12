@@ -1,16 +1,46 @@
 :host {
   position: relative;
 
+  .wrapper {
+    position: relative;
+  }
+
   .inner {
     position: relative;
     width: 100%;
     overflow: hidden;
   }
 
-  // img {
-  //   width: 100%;
-  //   display: block;
-  // }
+  .arrows {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .arrow {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.3);
+    width: 4rem;
+    fill: white;
+    z-index: 5;
+    top: 0;
+    bottom: 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    &.arrow-next {
+      right: 0;
+    }
+
+    &.arrow-prev {
+      left: 0;
+    }
+  }
 }
 
 ::slotted(*) {
@@ -20,25 +50,34 @@
   width: 100%;
   backface-visibility: hidden;
   perspective: 1000px;
+  transition: transform 1s ease;
 }
 
+::slotted(.visible),
 ::slotted(.active) {
   display: block;
 }
 
-::slotted(.prev-transition), ::slotted(.next-transition) {
+::slotted(.slide-prev.active) {
+  transform: translate3d(100%, 0, 0);
+}
+
+::slotted(.slide-next.active) {
+  transform: translate3d(-100%, 0, 0);
+}
+
+// Set initial position to the right of active
+::slotted(.visible-next) {
+  transform: translate3d(100%, 0, 0);
   position: absolute;
   top: 0;
-}
-
-::slotted(.prev-transition) {
   display: block;
 }
 
-::slotted(.next-transition) {
-  display: block;
+::slotted(.slide-prev:not(.active)),
+::slotted(.visible-next.slide-next) {
+  transform: translate3d(0, 0, 0);
 }
-
 
 // .carousel-item.active,
 // .carousel-item-next,

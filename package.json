@@ -1,7 +1,7 @@
 {
-  "name": "my-component",
+  "name": "ssui-carousel",
   "version": "0.0.1",
-  "description": "Stencil Component Starter",
+  "description": "Swift Soul UI Carousel",
   "module": "dist/esm/index.js",
   "main": "dist/index.js",
   "types": "dist/types/components.d.ts",

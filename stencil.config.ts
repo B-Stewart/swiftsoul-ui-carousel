@@ -2,7 +2,7 @@ import { Config } from '@stencil/core';
 import { sass } from '@stencil/sass';
 
 export const config: Config = {
-  namespace: 'swifty-carousel',
+  namespace: 'ssui-carousel',
   outputTargets:[
     {
       type: 'dist'

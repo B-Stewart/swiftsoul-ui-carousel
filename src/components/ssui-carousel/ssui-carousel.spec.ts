@@ -1,19 +1,19 @@
 import { TestWindow } from '@stencil/core/testing';
-import { SwiftyCarousel } from './swifty-carousel';
+import { SSUICarousel } from './ssui-carousel';
 
-describe('my-component', () => {
+describe('ssui-carousel', () => {
   it('should build', () => {
-    expect(new SwiftyCarousel()).toBeTruthy();
+    expect(new SSUICarousel()).toBeTruthy();
   });
 
   describe('rendering', () => {
-    let element: HTMLSwiftyCarouselElement;
+    let element: HTMLSsuiCarouselElement;
     let testWindow: TestWindow;
     beforeEach(async () => {
       testWindow = new TestWindow();
       element = await testWindow.load({
-        components: [SwiftyCarousel],
-        html: '<my-component></my-component>'
+        components: [SSUICarousel],
+        html: '<ssui-carousel></ssui-carousel>'
       });
     });
 
