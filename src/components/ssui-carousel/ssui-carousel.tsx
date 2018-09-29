@@ -30,6 +30,17 @@ export class SSUICarousel {
   activeSlide: Element
   @State()
   transitioning: boolean
+  @State()
+  wrapper: Element
+  // Touch state
+  @State()
+  longTouch: boolean
+  @State()
+  touchstartx: number
+  @State()
+  touchmovex: number
+  @State()
+  movex: number
 
   transition = (
     newActiveElement: Element,
@@ -62,6 +73,8 @@ export class SSUICarousel {
     // add active animation classes
     this.activeSlide.classList.add(slideDirection)
   }
+
+  swipeTransition = () => {}
 
   showNext = () => {
     console.log("slide next")
@@ -113,6 +126,7 @@ export class SSUICarousel {
         cssDefinitions.active,
         cssDefinitions.visible
       )
+      // Set other state classes
       // Set next slides to next visible
       // TODO: Support multiple
       this.getNextElement(this.activeSlide).classList.add(
@@ -126,16 +140,76 @@ export class SSUICarousel {
     }
   }
 
+  setUpSwipeListeners() {
+    // Flick
+    setTimeout(() => {
+      this.longTouch = true
+    }, 250)
+
+    this.wrapper.addEventListener("touchstart", e => {
+      console.log("touchstart", e)
+      // Get the original touch position.
+      this.touchstartx = e.touches[0].pageX
+    })
+
+    this.wrapper.addEventListener("touchmove", e => {
+      console.log("touchmove", e)
+      // Continuously return touch position.
+      this.touchmovex = e.touches[0].pageX
+      // Calculate distance to translate holder.
+      // this.movex = this.index * this.slideWidth + (this.touchstartx - this.touchmovex);
+      this.movex = this.touchstartx - this.touchmovex
+      // Defines the speed the images should move at.
+      // Makes the holder stop moving when there is no more content.
+      this.activeSlide.setAttribute(
+        "style",
+        `transform: translate3d(${this.movex * -1}px,0,0)`
+      )
+
+      //Move next slides
+
+      //Move prev slides
+    })
+
+    this.wrapper.addEventListener("touchend", e => {
+      console.log("touchend", e)
+      // Settle into place
+
+      // Calculate the distance swiped.
+      // var absMove = Math.abs(this.index * this.slideWidth - this.movex)
+      // let absMove = this.movex
+      // // Calculate the index. All other calculations are based on the index.
+      // if (absMove > 100 / 2 || this.longTouch === false) {
+      //   if (this.movex > this.index * this.slideWidth && this.index < 2) {
+      //     this.index++
+      //   } else if (
+      //     this.movex < this.index * this.slideWidth &&
+      //     this.index > 0
+      //   ) {
+      //     this.index--
+      //   }
+      // }
+      // // Move and animate the elements.
+      // this.el.holder
+      //   .addClass("animate")
+      //   .css(
+      //     "transform",
+      //     "translate3d(-" + this.index * this.slideWidth + "px,0,0)"
+      //   )
+      // this.el.imgSlide
+      //   .addClass("animate")
+      //   .css("transform", "translate3d(-" + 100 - this.index * 50 + "px,0,0)")
+    })
+  }
+
   componentWillLoad() {
     console.log("Component is about to be rendered")
+    this.longTouch = false
     this.setActive(this.element.firstElementChild)
 
     // Sets up on click listeners
     Array.from(this.element.children).forEach(s => {
-      //   // s.addEventListener("click", () => {
-      //   //   this.slideNext()
-      //   // })
-      // This is currently taking the place of global styles
+      // TODO: Remove This is currently taking the place of global styles
       let img = s.querySelector("img")
       img.style.width = "100%"
       img.style.display = "block"
@@ -145,6 +219,10 @@ export class SSUICarousel {
   componentDidLoad() {
     console.log("Component has been rendered")
     console.log(this.element, Array.from(this.element.children))
+    // Set initial state
+    this.wrapper = this.element.shadowRoot.querySelector(".wrapper")
+
+    this.setUpSwipeListeners()
   }
 
   componentWillUpdate() {

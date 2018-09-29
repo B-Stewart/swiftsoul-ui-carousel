@@ -50,7 +50,7 @@
   width: 100%;
   backface-visibility: hidden;
   perspective: 1000px;
-  transition: transform 1s linear;
+  transition: transform 250ms linear;
 }
 
 ::slotted(.visible),
